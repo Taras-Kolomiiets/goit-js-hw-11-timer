@@ -1,3 +1,5 @@
+import './css/styles.css';
+
 class CountdownTimer {
   constructor({ selector, targetDate }) {
     this.selector = selector;
@@ -12,15 +14,20 @@ class CountdownTimer {
   }
 
   startTimer() {
-
     setInterval(() => {
-      let currentDate = Date.now();
+      const currentDate = Date.now();
       const targetDate = this.targetDate.getTime();
-      let deltaTime = targetDate - currentDate;
-
+      const deltaTime = targetDate - currentDate;
       const time = this.getTimeComponents(deltaTime);
 
-      this.updateClockface(time);
+      this.updateTimer(time);
+
+       if (deltaTime < 0) {
+        this.refs.days.textContent = '00';
+        this.refs.hours.textContent = '00';
+        this.refs.mins.textContent = '00';
+        this.refs.secs.textContent = '00';
+      }
     }, 1000);
   }
 
@@ -38,16 +45,18 @@ class CountdownTimer {
   pad(value) {
     return String(value).padStart(2, '0');
   }
+
+  updateTimer({ days, hours, mins, secs }) {
+    this.refs.days.textContent = `${days}`;
+    this.refs.hours.textContent = `${hours}`;
+    this.refs.mins.textContent = `${mins}`;
+    this.refs.secs.textContent = `${secs}`;
+  };
 }
 
-function updateClockface({ days, hours, mins, secs }) {
-  this.refs.days.textContent = `${days}`;
-  this.refs.hours.textContent = `${hours}`;
-  this.refs.mins.textContent = `${mins}`;
-  this.refs.secs.textContent = `${secs}`;
-};
-
-new CountdownTimer({
+const timer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2022'),
+  targetDate: new Date('Sep 17, 2021'),
 });
+
+timer.startTimer();
